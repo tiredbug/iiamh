@@ -4,13 +4,14 @@ export PATH
 
 clear;
 echo '================================================================';
-echo ' [LNMP/Nginx] Amysql Host - AMH 4.2 ';
-echo ' http://Amysql.com';
+echo ' [LTMP/AMH4.2] iiAMH - AMH Web Service';
+echo ' Tengine & Mariadb & PHP & AMH4.2 by homeii';
+echo ' http://Amysql.com http://homeii.info';
 echo '================================================================';
 
 
 # VAR ***************************************************************************************
-AMHDir='/home/amh_install/';
+AMHDir='./';
 SysName='';
 SysBit='';
 Cpunum='';
@@ -26,11 +27,11 @@ PHPDisable='';
 
 # Version
 AMSVersion='ams-1.5.0107-02';
-AMHVersion='amh-4.2';
+AMHVersion='iiamh-1.0';
 LibiconvVersion='libiconv-1.14';
-MysqlVersion='mysql-5.5.34';
+MysqlVersion='mariadb-10.0.14';
 PhpVersion='php-5.3.27';
-NginxVersion='nginx-1.4.7';
+NginxVersion='tengine-2.0.3';
 PureFTPdVersion='pure-ftpd-1.0.36';
 
 # Function List	*****************************************************************************
@@ -51,12 +52,12 @@ function CheckSystem()
 	echo '================================================================';
 	
 	RamSum=$[$RamTotal+$RamSwap];
-	[ "$SysBit" == '32' ] && [ "$RamSum" -lt '250' ] && \
+	[ "$SysBit" == '32' ] && [ "$RamSum" -lt '100' ] && \
 	echo -e "[Error] Not enough memory install AMH. \n(32bit system need memory: ${RamTotal}MB*RAM + ${RamSwap}MB*Swap > 250MB)" && exit;
 
-	if [ "$SysBit" == '64' ] && [ "$RamSum" -lt '480' ];  then
+	if [ "$SysBit" == '64' ] && [ "$RamSum" -lt '200' ];  then
 		echo -e "[Error] Not enough memory install AMH. \n(64bit system need memory: ${RamTotal}MB*RAM + ${RamSwap}MB*Swap > 480MB)";
-		[ "$RamSum" -gt '250' ] && echo "[Notice] Please use 32bit system.";
+		[ "$RamSum" -gt '100' ] && echo "[Notice] Please use 32bit system.";
 		exit;
 	fi;
 	
@@ -205,7 +206,8 @@ function InstallReady()
 	chmod +Rw /root/amh;
 
 	cd $AMHDir/packages;
-	wget http://amysql.com/file/AMH/4.2/conf.zip;
+	#All Files Are In The Zip.--iiamh
+	#wget http://amysql.com/file/AMH/4.2/conf.zip;
 	unzip conf.zip -d $AMHDir/conf;
 }
 
@@ -277,7 +279,7 @@ function InstallMysql()
 {
 	# [dir] /usr/local/mysql/
 	echo "[${MysqlVersion} Installing] ************************************************** >>";
-	Downloadfile "${MysqlVersion}.tar.gz" "http://code.amysql.com/files/${MysqlVersion}.tar.gz";
+	Downloadfile "${MysqlVersion}.tar.gz" "http://mirrors.neusoft.edu.cn/mariadb/${MysqlVersion}/source/${MysqlVersion}.tar.gz";
 	rm -rf $AMHDir/packages/untar/$MysqlVersion;
 	echo "tar -zxf ${MysqlVersion}.tar.gz ing...";
 	tar -zxf $AMHDir/packages/$MysqlVersion.tar.gz -C $AMHDir/packages/untar;
@@ -344,7 +346,7 @@ function InstallPhp()
 {
 	# [dir] /usr/local/php
 	echo "[${PhpVersion} Installing] ************************************************** >>";
-	Downloadfile "${PhpVersion}.tar.gz" "http://code.amysql.com/files/${PhpVersion}.tar.gz";
+	Downloadfile "${PhpVersion}.tar.gz" "http://cn2.php.net/distributions/${PhpVersion}.tar.gz";
 	rm -rf $AMHDir/packages/untar/$PhpVersion;
 	echo "tar -zxf ${PhpVersion}.tar.gz ing...";
 	tar -zxf $AMHDir/packages/$PhpVersion.tar.gz -C $AMHDir/packages/untar;
@@ -384,14 +386,16 @@ function InstallNginx()
 {
 	# [dir] /usr/local/nginx
 	echo "[${NginxVersion} Installing] ************************************************** >>";
-	Downloadfile "${NginxVersion}.tar.gz" "http://code.amysql.com/files/${NginxVersion}.tar.gz";
+	Downloadfile "${OpensslVersion}.tar.gz" "http://www.openssl.org/source/${OpensslVersion}.tar.gz";
+	Downloadfile "${NginxVersion}.tar.gz" "http://tengine.taobao.org/download/${NginxVersion}.tar.gz";
 	rm -rf $AMHDir/packages/untar/$NginxVersion;
 	echo "tar -zxf ${NginxVersion}.tar.gz ing...";
+	tar -zxf $AMHDir/packages/$OpensslVersion.tar.gz -C $AMHDir/packages/untar;
 	tar -zxf $AMHDir/packages/$NginxVersion.tar.gz -C $AMHDir/packages/untar;
 
 	if [ ! -d /usr/local/nginx ]; then
 		cd $AMHDir/packages/untar/$NginxVersion;
-		./configure --prefix=/usr/local/nginx --user=www --group=www --with-http_ssl_module  --with-http_gzip_static_module --without-mail_pop3_module --without-mail_imap_module --without-mail_smtp_module --without-http_uwsgi_module --without-http_scgi_module ;
+		./configure --prefix=/usr/local/nginx --user=www --group=www --with-http_ssl_module  --with-http_gzip_static_module --without-mail_pop3_module --without-mail_imap_module --without-mail_smtp_module --without-http_uwsgi_module --without-http_scgi_module --with-openssl="${AMHDir}/packages/untar/${OpensslVersion}" ;
 		make -j $Cpunum;
 		make install;
 
@@ -565,7 +569,7 @@ fi;
 rm -rf $AMHDir;
 
 echo '================================================================';
-	echo '[AMH] Congratulations, AMH 4.2 install completed.';
+	echo '[AMH] Congratulations, iiAMH 1.0 install completed.';
 	echo "AMH Management: http://${Domain}:8888";
 	echo 'User:admin';
 	echo "Password:${AMHPass}";
@@ -598,5 +602,5 @@ echo '================================================================';
 echo '================================================================';
 else
 	echo 'Sorry, Failed to install AMH';
-	echo 'Please contact us: http://amysql.com';
+	echo 'Please contact us: http://amysql.com or http://homeii.info';
 fi;
