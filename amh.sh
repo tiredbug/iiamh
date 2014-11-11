@@ -33,6 +33,7 @@ MysqlVersion='mariadb-10.0.14';
 PhpVersion='php-5.3.27';
 NginxVersion='tengine-2.0.3';
 PureFTPdVersion='pure-ftpd-1.0.36';
+OpensslVersion='openssl-1.0.1j';
 
 # Function List	*****************************************************************************
 function CheckSystem()
@@ -208,7 +209,7 @@ function InstallReady()
 	cd $AMHDir/packages;
 	#All Files Are In The Zip.--iiamh
 	#wget http://amysql.com/file/AMH/4.2/conf.zip;
-	unzip conf.zip -d $AMHDir/conf;
+	unzip $AMHDir/packages/conf.zip -d $AMHDir/conf;
 }
 
 
@@ -395,7 +396,7 @@ function InstallNginx()
 
 	if [ ! -d /usr/local/nginx ]; then
 		cd $AMHDir/packages/untar/$NginxVersion;
-		./configure --prefix=/usr/local/nginx --user=www --group=www --with-http_ssl_module  --with-http_gzip_static_module --without-mail_pop3_module --without-mail_imap_module --without-mail_smtp_module --without-http_uwsgi_module --without-http_scgi_module --with-openssl="${AMHDir}/packages/untar/${OpensslVersion}" ;
+		./configure --prefix=/usr/local/nginx --user=www --group=www --with-http_ssl_module --with-http_spdy_module --with-http_gzip_static_module --without-mail_pop3_module --without-mail_imap_module --without-mail_smtp_module --without-http_uwsgi_module --without-http_scgi_module --with-openssl="${AMHDir}/packages/untar/${OpensslVersion}" ;
 		make -j $Cpunum;
 		make install;
 
