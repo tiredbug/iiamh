@@ -1,22 +1,5 @@
 #!/bin/bash
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
-echo '================================================================';
-echo 'Copying files,please wait....';
-echo '@iiAMH 1.0 homeii.info';
-echo '================================================================';
-export PATH
-mkdir $AMHDir;
-mkdir $AMHDir/packages;
-cp -rf "./" $AMHDir;
-sleep 2;
-clear;
-echo '================================================================';
-echo ' [LTMP/AMH4.2] iiAMH - AMH Web Service';
-echo ' Tengine & Mariadb & PHP & AMH4.2 by homeii';
-echo ' http://Amysql.com http://homeii.info';
-echo '================================================================';
-
-
 # VAR ***************************************************************************************
 AMHDir='/home/amhInst';
 SysName='';
@@ -41,6 +24,23 @@ PhpVersion='php-5.3.27';
 NginxVersion='tengine-2.0.3';
 PureFTPdVersion='pure-ftpd-1.0.36';
 OpensslVersion='openssl-1.0.1j';
+
+# INIT ***************************************************************************************
+clear;
+echo '================================================================';
+echo 'Copying files,please wait....';
+echo '@iiAMH 1.0 homeii.info';
+echo '================================================================';
+export PATH
+mkdir $AMHDir;
+cp -rf "./" $AMHDir;
+sleep 2;
+clear;
+echo '================================================================';
+echo ' [LTMP/AMH4.2] iiAMH - AMH Web Service';
+echo ' Tengine & Mariadb & PHP & AMH4.2 by homeii';
+echo ' http://Amysql.com http://homeii.info';
+echo '================================================================';
 
 # Function List	*****************************************************************************
 function CheckSystem()
