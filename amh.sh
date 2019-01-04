@@ -17,7 +17,7 @@ PHPDisable='';
 
 # Version
 AMSVersion='ams-1.5.0107-02';
-AMHVersion='iiamh-1.0';
+AMHVersion='amh-4.2';
 LibiconvVersion='libiconv-1.14';
 MysqlVersion='mariadb-10.0.14';
 PhpVersion='php-5.3.27';
@@ -287,7 +287,7 @@ function InstallMysql()
 {
 	# [dir] /usr/local/mysql/
 	echo "[${MysqlVersion} Installing] ************************************************** >>";
-	Downloadfile "${MysqlVersion}.tar.gz" "http://mirrors.neusoft.edu.cn/mariadb/${MysqlVersion}/source/${MysqlVersion}.tar.gz";
+	Downloadfile "${MysqlVersion}.tar.gz" "https://downloads.mariadb.com/MariaDB/${MysqlVersion}/source/${MysqlVersion}.tar.gz";
 	rm -rf $AMHDir/packages/untar/$MysqlVersion;
 	echo "tar -zxf ${MysqlVersion}.tar.gz ing...";
 	tar -zxf $AMHDir/packages/$MysqlVersion.tar.gz -C $AMHDir/packages/untar;
